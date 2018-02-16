@@ -16,17 +16,48 @@ $(document).ready(function(){
 
   $('#search').submit(function(){
     event.preventDefault()
-    const state = $("#locState").val().toLowerCase();
-    const city = $("#locCity").val().toLowerCase();
-    const location = `${state}-${city}`;//creates a location slug
+    const state = $("#locState").val();
+    const city = $("#locCity").val();
+    const location = `${state.toLowerCase()}-${city.toLowerCase()}`;//creates a location slug
 
-    let query = $("#condition"); //what ails you
+    let query = $("#condition").val(); //what ails you
 
     const url = `https://api.betterdoctor.com/2016-03-01/doctors?query=${query}&location=${location}&skip=0&limit=10&user_key=${apiKey}`;
     const doctors = searchDoc(url);
 
     doctors.then(function(response){
       let docs = JSON.parse(response);
+      console.log(docs["data"][1]["practices"][0]["visit_address"]["city"]);
+      if(docs["meta"]["count"] === 0){
+        /*put 'No Doctors Matched Your Search' in Results*/
+      }else{
+        for (var i = 0; i < docs["data"].length; i++) {
+          //profile
+          const doctor = docs["data"][i];
+          const docImg = doctor["profile"]["img_url"];
+          const docFirst = doctor["profile"]["first_name"];
+          const docLast = doctor["profile"]["last_name"];
+          const docName = docFirst + " " + docLast;
+
+          //practices
+          const docAccept = doctor["practices"]["accepts_new_patients"];
+          const docZip = doctor["practices"]["visit_address"]["zip"];
+          const docCity = doctor["practices"]["visit_address"]["city"];
+          const docState = doctor["practices"]["visit_address"]["state"];
+          const docStreet = doctor["practices"]["visit_address"]["street"];
+          const docAddress = `${docStreet} ${docCity}, ${docState} ${docZip}`;
+          const docPhone = () => {
+            const phones = doctor["practices"]["phones"];
+            for (let phone in phones){
+              if(phone.type !== "fax"){
+                return phone.number;
+              }
+            }
+          }
+
+          
+        }
+      }
 
     })
   })//end click event

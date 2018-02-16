@@ -23,6 +23,7 @@ __
 * When generating list of ailments to search for:
   * sort the list alphabetically
   * possibly have multiple dropdowns, so you don't have a single menu with a bit under 500 items. Or turn them all into links/buttons or something.
+* can probably clean up/separate out the Doctor properties.
 
 ## Technologies Used
 * JavaScript
