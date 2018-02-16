@@ -50,8 +50,8 @@ $(document).ready(function(){
           const docStreet = doctor["practices"][0]["visit_address"]["street"];
           const docAddress = `${docStreet} ${docCity}, ${docState} ${docZip}`;
 
-          const docPhone = searchPhones(doctor["practices"][0]["phones"]);
-          console.log(docPhone);
+          const docPhone = searchPhones();
+          // console.log(doctor["practices"][0]["phones"]);
           const accept = acceptSentence(docAccept, docLast);
 
           //Specialties
@@ -69,11 +69,13 @@ $(document).ready(function(){
           )//note: add alt text to image
 
           //helper functions
-          function searchPhones(phones){
-            for (let phone in phones){
-              // console.log(phone);
+          function searchPhones(){
+            console.log(doctor["practices"][0]["phones"]);
+            for (let j=0;j<doctor["practices"][0]["phones"].length;j++){
+              const phone = doctor["practices"][0]["phones"][j];
               if(phone.type !== "fax"){
-                return phone.number;
+                const num = phone["number"]
+                return `(${num.slice(0,3)}) ${num.slice(3, 6)}-${num.slice(6)}`;
               }
             }
           }
