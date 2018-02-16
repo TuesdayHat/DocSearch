@@ -11,11 +11,10 @@ module.exports = {
 		new webpack.ProvidePlugin({
 			$: 'jquery/dist/jquery.min.js',
 			jQuery: 'jquery'
-		}), /*tells javascript that any time $ or jquery appears in front of a statement, go looking for it in jQuery. does this instead of importing in each file that requires jQuery.*/
+		}),
     new CleanWebpackPlugin(['build']),
     new HtmlWebpackPlugin({
-			template: 'src/templates/index.html',
-			title: 'Production'
+			template: 'src/templates/index.html'
 		})
   ],
 	output: {
