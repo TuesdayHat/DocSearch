@@ -16,6 +16,7 @@ $(document).ready(function(){
 
   $('#search').submit(function(){
     event.preventDefault()
+    $('.results').empty();
     const state = $("#locState").val();
     const city = $("#locCity").val();
     const location = `${state.toLowerCase()}-${city.toLowerCase()}`;//creates a location slug
@@ -27,35 +28,62 @@ $(document).ready(function(){
 
     doctors.then(function(response){
       let docs = JSON.parse(response);
-      console.log(docs["data"][1]["practices"][0]["visit_address"]["city"]);
+      // console.log(docs["data"][1]["practices"][0]["visit_address"]["city"]);
       if(docs["meta"]["count"] === 0){
         /*put 'No Doctors Matched Your Search' in Results*/
+        $(".results").text("<h3>No doctors matched your search.<h3>")
       }else{
         for (var i = 0; i < docs["data"].length; i++) {
-          //profile
           const doctor = docs["data"][i];
-          const docImg = doctor["profile"]["img_url"];
+
+          //profile
+          const docImg = doctor["profile"]["image_url"];
           const docFirst = doctor["profile"]["first_name"];
           const docLast = doctor["profile"]["last_name"];
           const docName = docFirst + " " + docLast;
 
           //practices
-          const docAccept = doctor["practices"]["accepts_new_patients"];
-          const docZip = doctor["practices"]["visit_address"]["zip"];
-          const docCity = doctor["practices"]["visit_address"]["city"];
-          const docState = doctor["practices"]["visit_address"]["state"];
-          const docStreet = doctor["practices"]["visit_address"]["street"];
+          const docAccept = doctor["practices"][0]["accepts_new_patients"];
+          const docZip = doctor["practices"][0]["visit_address"]["zip"];
+          const docCity = doctor["practices"][0]["visit_address"]["city"];
+          const docState = doctor["practices"][0]["visit_address"]["state"];
+          const docStreet = doctor["practices"][0]["visit_address"]["street"];
           const docAddress = `${docStreet} ${docCity}, ${docState} ${docZip}`;
-          const docPhone = () => {
-            const phones = doctor["practices"]["phones"];
+
+          const docPhone = searchPhones(doctor["practices"][0]["phones"]);
+          console.log(docPhone);
+          const accept = acceptSentence(docAccept, docLast);
+
+          //Specialties
+          const docSpecial = doctor["specialties"][0]["description"];
+
+          $('.results').append(
+            `<div class="doctors">
+              <img src="${docImg}"><br>
+              <h3>${docName}</h3>
+              <p>${docSpecial}</p>
+              <p>${docAddress}</p>
+              <p>${docPhone}</p>
+              <p>${accept}</p>
+            </div>`
+          )//note: add alt text to image
+
+          //helper functions
+          function searchPhones(phones){
             for (let phone in phones){
+              // console.log(phone);
               if(phone.type !== "fax"){
                 return phone.number;
               }
             }
           }
-
-          
+          function acceptSentence(accept, docLast){
+            if(accept){
+              return `Dr. ${docLast} is accepting new patients!`
+            } else {
+              return `Dr. ${docLast} not accepting new patients at this time.`
+            }
+          };
         }
       }
 

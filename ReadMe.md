@@ -1,12 +1,11 @@
 # DocSearch
 
-#### . Feb 16, 2018
+#### Gives a list of doctors in an area. Feb 16, 2018
 
 #### Adam Calhoun
 
 ## Description
-
-__
+_Enter a location and a health problem to find a doctor who specialized in treating your problem near you._
 
 ## Setup
 * clone repo from github
@@ -24,6 +23,7 @@ __
   * sort the list alphabetically
   * possibly have multiple dropdowns, so you don't have a single menu with a bit under 500 items. Or turn them all into links/buttons or something.
 * can probably clean up/separate out the Doctor properties.
+* give a full list of all practices and phone numbers, rather than just the first one.
 
 ## Technologies Used
 * JavaScript
