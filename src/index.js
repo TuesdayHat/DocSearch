@@ -1,5 +1,7 @@
 var apiKey = require('./../.env').apiKey;
 import {searchDoc, getConditions} from './DocSearch.js';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './templates/styles.css';
 
 $(document).ready(function(){
 
@@ -7,7 +9,6 @@ $(document).ready(function(){
   conditions.then(function(response){
     let ails = JSON.parse(response);
     for (let i=0;i<ails["data"].length;i++){
-      // console.log(ails["data"][i]["name"]);
       let name = ails["data"][i]["name"];
       let uid = ails["data"][i]["uid"];
       $('#condition').append(`<option value='${uid}'>${name}</option>`);
@@ -28,9 +29,7 @@ $(document).ready(function(){
 
     doctors.then(function(response){
       let docs = JSON.parse(response);
-      // console.log(docs["data"][1]["practices"][0]["visit_address"]["city"]);
       if(docs["meta"]["count"] === 0){
-        /*put 'No Doctors Matched Your Search' in Results*/
         $(".results").text("<h3>No doctors matched your search.<h3>")
       }else{
         for (var i = 0; i < docs["data"].length; i++) {
@@ -49,9 +48,7 @@ $(document).ready(function(){
           const docState = doctor["practices"][0]["visit_address"]["state"];
           const docStreet = doctor["practices"][0]["visit_address"]["street"];
           const docAddress = `${docStreet} ${docCity}, ${docState} ${docZip}`;
-
           const docPhone = searchPhones();
-          // console.log(doctor["practices"][0]["phones"]);
           const accept = acceptSentence(docAccept, docLast);
 
           //Specialties
