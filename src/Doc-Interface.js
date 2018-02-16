@@ -9,10 +9,10 @@ $(document).ready(function(){
     $('#query').append(name);
   }
 
-  $('#search').click(function(){
-    let state = $("#locState").val();
-    let city = $("#locCity").val();
-    let location = `${state}-${city}`;//creates a location slug
+  $('#search').submit(function(){
+    const state = $("#locState").val().toLowerCase();
+    const city = $("#locCity").val().toLowerCase();
+    const location = `${state}-${city}`;//creates a location slug
 
     let query = $("#query"); //what ails you
 
